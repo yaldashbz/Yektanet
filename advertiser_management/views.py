@@ -1,9 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import RedirectView
 from django.http import HttpResponseRedirect
+
 from .models.advertiser import Advertiser
 from .models.ad import Ad
 from .forms import CreateAdForm
+
+from .services import update_all_advertisers
 
 
 def create_ad(request):
@@ -45,12 +48,3 @@ class AdOnClickRedirectView(RedirectView):
         ad = get_object_or_404(Ad, pk=kwargs['ad_id'])
         ad.update_on_click()
         return ad.link
-
-
-def update_all_advertisers(advertisers):
-    for advertiser in advertisers:
-        if len(advertiser.ads.all()) == 0:
-            advertiser.update_empty_on_view()
-        else:
-            for ad in advertiser.ads.all():
-                ad.update_on_view()
