@@ -76,8 +76,10 @@ WSGI_APPLICATION = 'Yektanet.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': 'advertising',
+        'USER': 'postgres',
         'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
