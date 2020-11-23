@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -32,9 +31,10 @@ class Migration(migrations.Migration):
                 ('clicks', models.PositiveBigIntegerField(default=0)),
                 ('views', models.PositiveBigIntegerField(default=0)),
                 ('title', models.CharField(max_length=100, verbose_name='موضوع')),
-                ('img_url', models.FileField(upload_to='', verbose_name='عکس تبلیغ')),
+                ('img_url', models.URLField(verbose_name='ادرس عکس تبلیغ')),
                 ('link', models.URLField(verbose_name='ادرس سایت شما')),
-                ('advertiser', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ads', to='advertiser_management.advertiser', verbose_name='تبلیغ کننده')),
+                ('advertiser', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ads',
+                                                 to='advertiser_management.advertiser', verbose_name='تبلیغ کننده')),
             ],
             options={
                 'verbose_name': 'تبلیغ',

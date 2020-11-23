@@ -16,8 +16,8 @@ class Ad(BaseAdvertising):
         verbose_name='موضوع'
     )
 
-    img_url = models.FileField(
-        verbose_name='عکس تبلیغ',
+    img_url = models.URLField(
+        verbose_name=' ادرس عکس تبلیغ'
     )
 
     link = models.URLField(
@@ -30,3 +30,15 @@ class Ad(BaseAdvertising):
 
     def __str__(self):
         return str(self.advertiser) + ' : ' + str(self.title)
+
+    def update_on_click(self):
+        self.clicks += 1
+        self.advertiser.clicks += 1
+        self.save(update_fields=['clicks'])
+        self.advertiser.save(update_fields=['clicks'])
+
+    def update_on_view(self):
+        self.views += 1
+        self.advertiser.views += 1
+        self.save(update_fields=['views'])
+        self.advertiser.save(update_fields=['views'])

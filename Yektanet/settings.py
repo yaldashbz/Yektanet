@@ -11,10 +11,14 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
+
+# MEDIA_URL = '/images/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -26,7 +30,6 @@ SECRET_KEY = '*8^xly_gt^_1g0n+blpodqrbow#()zamsp-2#f0&x9+7lzqxs1'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -70,7 +73,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Yektanet.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -84,7 +86,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -104,16 +105,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 # LANGUAGE_CODE = 'en-us'
 
-LANGUAGES = [
-    ('en', "English"),
-    ('fa', "Farsi"),
-]
+# LANGUAGES = [
+#     ('en', "English"),
+#     ('fa', "Farsi"),
+# ]
 
 LANGUAGE_CODE = 'en'
 
@@ -124,7 +124,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/

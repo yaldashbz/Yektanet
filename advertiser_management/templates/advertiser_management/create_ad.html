@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Ad</title>
+</head>
+<body>
+<div>
+    <form action="" method="post">
+    {% csrf_token %}
+        {{ form.as_p }}
+        {{ error_message }}
+{#    <p>#}
+{#        <label for="advertiser_id">Advertiser ID: </label>#}
+{#        <input id="advertiser_id" type="text" value="{{ advertiser_id }}">#}
+{#    </p>#}
+{#    <p>#}
+{#        <label for="title">Title: </label>#}
+{#        <input id="title" type="text" value="{{ title }}">#}
+{#    </p>#}
+{#    <p>#}
+{#        <label for="image">Image: </label>#}
+{#        <input id="image" type="url" value="{{ img_url }}">#}
+{#    </p>#}
+{#    <p>#}
+{#        <label for="link">Link: </label>#}
+{#        <input id="link" type="url" value="{{ link }}">#}
+{#    </p>#}
+    <input type="submit" value="OK">
+    </form>
+{#    {% if form.errors %}#}
+{#	<div id="errors">#}
+{#		<div class="inner">#}
+{#			<p>There were some errors in the information you entered. Please correct the following:</p>#}
+{#			{{ form.non_field_errors }}#}
+{#			<ul>#}
+{#				{% for field in form %}#}
+{#					{% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}#}
+{#				{% endfor %}#}
+{#			</ul>#}
+{#		</div>#}
+{#	</div>#}
+{#    {% endif %}#}
+</div>
+</body>
+</html>

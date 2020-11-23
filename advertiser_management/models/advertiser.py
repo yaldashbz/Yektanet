@@ -15,3 +15,6 @@ class Advertiser(BaseAdvertising):
     def __str__(self):
         return self.name
 
+    def update_empty_on_view(self):
+        self.views += 1
+        self.save(update_fields=['views'])
