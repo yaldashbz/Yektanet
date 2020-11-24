@@ -1,8 +1,8 @@
 from django.urls import path
-from . import views
+from advertiser_management.views import create_ad, show_ads_all, AdOnClickRedirectView
 
 urlpatterns = [
-    path('create-ad/', views.create_ad, name='create-ad'),
-    path('all-ads/', views.show_ads_all, name='all-ads'),
-    path('click/<int:ad_id>/', views.AdOnClickRedirectView.as_view(), name='ad_on_click')
+    path('create-ad/', create_ad, name='create-ad'),
+    path('all-ads/', show_ads_all, name='all-ads'),
+    path('click/<int:ad_id>/', AdOnClickRedirectView.as_view(), name='ad_on_click')
 ]

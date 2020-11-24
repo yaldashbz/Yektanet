@@ -2,11 +2,11 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import RedirectView
 from django.http import HttpResponseRedirect
 
-from .models.advertiser import Advertiser
-from .models.ad import Ad
-from .forms import CreateAdForm
+from advertiser_management.models.advertiser import Advertiser
+from advertiser_management.models.ad import Ad
+from advertiser_management.forms import CreateAdForm
 
-from .services import update_all_advertisers
+from advertiser_management.services import update_all_advertisers
 
 
 def create_ad(request):

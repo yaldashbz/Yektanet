@@ -6,3 +6,6 @@ db.sqlite3
 
 # ides / editors
 .idea
+
+# .env
+Yektanet/.env

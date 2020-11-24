@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models.ad import Ad
-from .models.advertiser import Advertiser
+from advertiser_management.models.advertiser import Advertiser
+from advertiser_management.models.ad import Ad
 
 
 @admin.register(Advertiser)
