@@ -1,26 +1,26 @@
-from django.db import models
+from django.db.models import ForeignKey, CharField, URLField, CASCADE
 from advertiser_management.models.base_model import BaseAdvertising
 from advertiser_management.models.advertiser import Advertiser
 
 
 class Ad(BaseAdvertising):
-    advertiser = models.ForeignKey(
+    advertiser = ForeignKey(
         to=Advertiser,
         related_name='ads',
         verbose_name='تبلیغ کننده',
-        on_delete=models.CASCADE
+        on_delete=CASCADE
     )
 
-    title = models.CharField(
+    title = CharField(
         max_length=100,
         verbose_name='موضوع'
     )
 
-    img_url = models.URLField(
+    img_url = URLField(
         verbose_name=' ادرس عکس تبلیغ'
     )
 
-    link = models.URLField(
+    link = URLField(
         verbose_name='ادرس سایت شما'
     )
 

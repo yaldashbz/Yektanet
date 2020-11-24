@@ -1,12 +1,12 @@
-from django.db import models
+from django.db.models import Model, PositiveBigIntegerField
 
 
-class BaseAdvertising(models.Model):
-    clicks = models.PositiveBigIntegerField(
+class BaseAdvertising(Model):
+    clicks = PositiveBigIntegerField(
         default=0
     )
 
-    views = models.PositiveBigIntegerField(
+    views = PositiveBigIntegerField(
         default=0
     )
 

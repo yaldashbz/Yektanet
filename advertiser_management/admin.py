@@ -1,13 +1,13 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
 from advertiser_management.models.advertiser import Advertiser
 from advertiser_management.models.ad import Ad
 
 
-@admin.register(Advertiser)
-class AdvertiserAdmin(admin.ModelAdmin):
+@register(Advertiser)
+class AdvertiserAdmin(ModelAdmin):
     fields = ['name']
 
 
-@admin.register(Ad)
-class AdAdmin(admin.ModelAdmin):
+@register(Ad)
+class AdAdmin(ModelAdmin):
     exclude = ['clicks', 'views']

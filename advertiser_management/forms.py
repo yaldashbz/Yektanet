@@ -1,13 +1,13 @@
-from django import forms
+from django.forms import Form, IntegerField,CharField, URLField
 
 
-class CreateAdForm(forms.Form):
-    advertiser_id = forms.IntegerField()
+class CreateAdForm(Form):
+    advertiser_id = IntegerField()
 
-    title = forms.CharField(
+    title = CharField(
         max_length=100
     )
 
-    img_url = forms.URLField()
+    img_url = URLField()
 
-    link = forms.URLField()
+    link = URLField()

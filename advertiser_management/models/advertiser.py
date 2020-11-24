@@ -1,9 +1,9 @@
-from django.db import models
+from django.db.models import CharField
 from advertiser_management.models.base_model import BaseAdvertising
 
 
 class Advertiser(BaseAdvertising):
-    name = models.CharField(
+    name = CharField(
         max_length=20,
         verbose_name='نام'
     )
