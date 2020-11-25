@@ -1,4 +1,4 @@
-from django.db.models import Model, DateTimeField, GenericIPAddressField, ForeignKey, CASCADE
+from django.db.models import Model, DateTimeField, GenericIPAddressField, ForeignKey, CASCADE, DurationField
 from django.utils import timezone
 
 from .ad import Ad
@@ -21,6 +21,8 @@ class Click(BaseAttribute):
         related_name='clicks',
         on_delete=CASCADE
     )
+
+    duration = DurationField()
 
     def __str__(self):
         return str(self.ad.id) + ' : ' + self.ip + ' - ' + str(self.time)
