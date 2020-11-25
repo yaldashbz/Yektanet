@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import RedirectView
+from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect
 
 from .models.advertiser import Advertiser
@@ -8,39 +9,35 @@ from .models.attributes import Click, View
 from .forms import CreateAdForm
 
 
-def create_ad(request):
-    form = CreateAdForm(request.POST)
+class CreateAdFormView(FormView):
+    template_name = 'advertiser_management/create_ad.html'
+    form_class = CreateAdForm
+    success_url = '/advertiser-management/all-ads'
 
-    if form.is_valid():
-        advertiser_id = request.POST['advertiser_id']
+    def form_valid(self, form):
+        advertiser_id = form.cleaned_data['advertiser_id']
         try:
             advertiser = Advertiser.objects.get(pk=advertiser_id)
             img_url = form.cleaned_data['img_url']
-            link = request.POST['link']
-            title = request.POST['title']
-            ad = Ad.objects.create(advertiser=advertiser, title=title, img_url=img_url, link=link)
+            link = form.cleaned_data['link']
+            title = form.cleaned_data['title']
+            Ad.objects.create(advertiser=advertiser, title=title, img_url=img_url, link=link)
 
-            # bara sakhtesh view nabayad besaze
-            ip = request.ip
-            View.objects.create(ad=ad, ip=ip)
-
-            return HttpResponseRedirect('/advertiser-management/all-ads')
+            return super().form_valid(form)
 
         except(KeyError, Advertiser.DoesNotExist):
-            return render(request, 'advertiser_management/create_ad.html', {
+            return render(self.request, 'advertiser_management/create_ad.html', {
                 'form': form,
                 'error_message': 'Advertiser ID is not valid.'
             })
-
-    return render(request, 'advertiser_management/create_ad.html', {
-        'form': form
-    })
 
 
 def show_ads_all(request):
     advertisers = Advertiser.objects.all() #na intori
     # update_all_advertisers(advertisers)
     context = {'advertisers': advertisers}
+    # ip = request.ip
+    # View.objects.create(ad=ad, ip=ip)
     return render(request, 'advertiser_management/ads.html', context)
 
 
