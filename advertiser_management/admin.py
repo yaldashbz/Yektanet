@@ -27,8 +27,3 @@ class ClickAdmin(ModelAdmin):
 class ViewAdmin(ModelAdmin):
     pass
 
-
-# for debug
-# @register(Ad)
-# class AdAdmin(ModelAdmin):
-#     exclude = ['clicks', 'views']

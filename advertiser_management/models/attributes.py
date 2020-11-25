@@ -1,7 +1,7 @@
 from django.db.models import Model, DateTimeField, GenericIPAddressField, ForeignKey, CASCADE, DurationField
 from django.utils import timezone
 
-from .ad import Ad
+from advertiser_management.models.ad import Ad
 
 
 class BaseAttribute(Model):
