@@ -1,14 +1,25 @@
-from django.db.models import ForeignKey, CharField, URLField, CASCADE
-from advertiser_management.models.base_model import BaseAdvertising
-from advertiser_management.models.advertiser import Advertiser
+from django.db.models import Model, ForeignKey, CharField, URLField, CASCADE
+from .advertiser import Advertiser
 
 
-class Ad(BaseAdvertising):
+class Ad(Model):
+    APPROVAL_CHOICES = (
+        ('accepted', 'قبول'),
+        ('denied', 'رد'),
+    )
+
     advertiser = ForeignKey(
         to=Advertiser,
         related_name='ads',
         verbose_name='تبلیغ کننده',
         on_delete=CASCADE
+    )
+
+    approve = CharField(
+        max_length=10,
+        choices=APPROVAL_CHOICES,
+        verbose_name='وضعیت',
+        default='denied'
     )
 
     title = CharField(
@@ -17,7 +28,7 @@ class Ad(BaseAdvertising):
     )
 
     img_url = URLField(
-        verbose_name=' ادرس عکس تبلیغ'
+        verbose_name=' ادرس عکس تبلیغ',
     )
 
     link = URLField(
@@ -30,15 +41,3 @@ class Ad(BaseAdvertising):
 
     def __str__(self):
         return str(self.advertiser) + ' : ' + str(self.title)
-
-    def update_on_click(self):
-        self.clicks += 1
-        self.advertiser.clicks += 1
-        self.save(update_fields=['clicks'])
-        self.advertiser.save(update_fields=['clicks'])
-
-    def update_on_view(self):
-        self.views += 1
-        self.advertiser.views += 1
-        self.save(update_fields=['views'])
-        self.advertiser.save(update_fields=['views'])

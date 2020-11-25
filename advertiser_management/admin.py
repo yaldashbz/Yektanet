@@ -1,6 +1,15 @@
 from django.contrib.admin import ModelAdmin, register
-from advertiser_management.models.advertiser import Advertiser
-from advertiser_management.models.ad import Ad
+from .models.advertiser import Advertiser
+from .models.ad import Ad
+from .models.attributes import View, Click
+from .services import ApproveStatusFilter
+
+
+@register(Ad)
+class AdAdmin(ModelAdmin):
+    fields = ['approve']
+    search_fields = ['title']
+    list_filter = [ApproveStatusFilter]
 
 
 @register(Advertiser)
@@ -8,6 +17,18 @@ class AdvertiserAdmin(ModelAdmin):
     fields = ['name']
 
 
-@register(Ad)
-class AdAdmin(ModelAdmin):
-    exclude = ['clicks', 'views']
+# debug
+@register(Click)
+class ClickAdmin(ModelAdmin):
+    pass
+
+
+@register(View)
+class ViewAdmin(ModelAdmin):
+    pass
+
+
+# for debug
+# @register(Ad)
+# class AdAdmin(ModelAdmin):
+#     exclude = ['clicks', 'views']

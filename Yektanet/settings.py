@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'advertiser_management.apps.AdvertiserManagementConfig'
 ]
 
+#  todo
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -55,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'advertiser_management.middleware.IPMiddleware'
 ]
 
 ROOT_URLCONF = 'Yektanet.urls'

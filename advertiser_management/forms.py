@@ -1,4 +1,4 @@
-from django.forms import Form, IntegerField,CharField, URLField
+from django.forms import Form, IntegerField, CharField, URLField
 
 
 class CreateAdForm(Form):

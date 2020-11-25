@@ -1,7 +1,20 @@
-def update_all_advertisers(advertisers):
-    for advertiser in advertisers:
-        if len(advertiser.ads.all()) == 0:
-            advertiser.update_empty_on_view()
+from django.contrib.admin import SimpleListFilter
+
+
+class ApproveStatusFilter(SimpleListFilter):
+    title = 'approve status'
+    parameter_name = 'ads'
+
+    def lookups(self, request, model_admin):
+        return [
+            ('accepted', 'accepted'),
+            ('denied', 'denied')
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value() == 'accepted':
+            return queryset.filter(approve='accepted')
+        elif self.value() == 'denied':
+            return queryset.filter(approve='denied')
         else:
-            for ad in advertiser.ads.all():
-                ad.update_on_view()
+            return queryset
