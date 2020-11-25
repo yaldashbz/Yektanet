@@ -41,3 +41,4 @@ class Ad(Model):
 
     def __str__(self):
         return str(self.advertiser) + ' : ' + str(self.title)
+
