@@ -1,8 +1,8 @@
 from django.contrib.admin import ModelAdmin, register
-from .models.advertiser import Advertiser
-from .models.ad import Ad
-from .models.attributes import View, Click
-from .services import ApproveStatusFilter
+from advertiser_management.models.advertiser import Advertiser
+from advertiser_management.models.ad import Ad
+from advertiser_management.models.attributes import View, Click
+from advertiser_management.services import ApproveStatusFilter
 
 
 @register(Ad)

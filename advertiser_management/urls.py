@@ -1,7 +1,7 @@
 from django.urls import path, register_converter
 from advertiser_management.views.user_views import AdOnClickRedirectView, CreateAdFormView, ShowAllAdsListView
 from advertiser_management.views.report_views import TotalClicksAndViewsListView, CSRListView, EstimateDurationListView
-from .converters import DateTimeConverter
+from advertiser_management.converters import DateTimeConverter
 
 register_converter(DateTimeConverter, 'date-time')
 

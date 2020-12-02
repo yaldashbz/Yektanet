@@ -1,4 +1,4 @@
-"""Yektanet URL Configuration
+"""yektanet URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
@@ -19,8 +19,9 @@ from django.urls import path, include
 
 #  todo
 urlpatterns = [
-    # path('admin/', admin.site.urls),
-    path('advertiser-management/', include('advertiser_management.urls'))
+    path('admin/', admin.site.urls),
+    path('advertiser-management/', include('advertiser_management.urls')),
+    path('user/', include('user.urls'))
 ]
 
-urlpatterns += i18n_patterns(path('admin/', admin.site.urls))
+# urlpatterns += i18n_patterns(path('admin/', admin.site.urls))

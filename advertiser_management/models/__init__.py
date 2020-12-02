@@ -1,3 +1,3 @@
-from .advertiser import Advertiser
-from .ad import Ad
-from .attributes import BaseAttribute, Click, View
+from advertiser_management.models.advertiser import Advertiser
+from advertiser_management.models.ad import Ad
+from advertiser_management.models.attributes import BaseAttribute, Click, View

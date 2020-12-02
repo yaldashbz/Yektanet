@@ -1,5 +1,4 @@
 from django.utils import timezone
-from datetime import time
 
 
 class DateConverter:
