@@ -1,4 +1,8 @@
-from django.db.models import Model, ForeignKey, CharField, URLField, CASCADE
+from django.db.models import Model, ForeignKey, CharField, URLField, CASCADE, Count, F
+from django.db.models.functions import Cast
+from django.db.models import Count, Q, F, FloatField
+from django.utils import timezone
+
 from advertiser_management.models.advertiser import Advertiser
 
 
@@ -41,4 +45,70 @@ class Ad(Model):
 
     def __str__(self):
         return str(self.advertiser) + ' : ' + str(self.title)
+
+    @staticmethod
+    def get_total_ctr(start_time, end_time):
+        return Ad.objects.annotate(
+            total_views=Count(
+                F('views'),
+                distinct=True,
+                filter=Q(
+                    views__time__range=(start_time, end_time)
+                )
+            )
+        ).filter(
+            total_views__gt=0
+        ).annotate(
+            ctr=Cast(Count(
+                F('clicks'),
+                distinct=True,
+                filter=Q(
+                    clicks__time__range=(start_time, end_time)
+                )
+            ), FloatField()) / Cast(Count(
+                F('views'),
+                distinct=True,
+                filter=Q(
+                    views__time__range=(start_time, end_time)
+                ),
+                output_field=FloatField()
+            ), FloatField())
+        ).order_by('-ctr')
+
+    @staticmethod
+    def get_total_clicks_views(start_time, end_time, delta):
+        ads = Ad.objects.all()
+        response = dict()
+        for ad in ads:
+            ad_response = list()
+            start = start_time
+            while start < end_time:
+                end = start + timezone.timedelta(hours=delta)
+                d = Ad.get_query_in_time_range(ad, start_time=start, end_time=end)
+                ad_response.append(d)
+
+                start = end
+
+            response.update({ad: ad_response})
+
+        return response
+
+    @staticmethod
+    def get_query_in_time_range(ad, start_time, end_time):
+        clicks_count = ad.clicks.filter(
+            time__range=(start_time, end_time)
+        ).count()
+
+        views_count = ad.views.filter(
+            time__range=(start_time, end_time)
+        ).count()
+
+        d = dict()
+        d.update({
+            'start_time': start_time,
+            'end_time': end_time,
+            'total_clicks': clicks_count,
+            'total_view': views_count,
+        })
+        return d
 

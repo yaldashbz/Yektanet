@@ -1,99 +1,53 @@
-from django.views.generic.list import ListView
-from django.db.models import Count, Q, F, FloatField
-from django.db.models.functions import Cast
-from django.utils import timezone
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.viewsets import ReadOnlyModelViewSet
+from django.utils import timezone, dateparse
 
 from advertiser_management.models import Ad
+from advertiser_management.serializers import AdSerializer, AdCTRSerializer, AdEstimationSerializer
 
 
-class EstimateDurationListView(ListView):
-    template_name = 'advertiser_management/report_estimate.html'
-    model = Ad
+class GetTimeMixin:
+    def get_time(self):
+        current_time = timezone.now()
+        start_time = self.request.query_params.get('start_time')
+        end_time = self.request.query_params.get('end_time')
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['ads'] = Ad.objects.all()
-        return context
+        if isinstance(start_time, str):
+            start_time = dateparse.parse_datetime(start_time) or current_time
 
+        if isinstance(end_time, str):
+            end_time = dateparse.parse_datetime(end_time) or current_time
 
-class CSRListView(ListView):
-    template_name = 'advertiser_management/report_csr.html'
-    model = Ad
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        start_time = self.kwargs['start_time']
-        end_time = self.kwargs['end_time']
-        ads = get_ads_total_csr(start_time, end_time)
-        context['ads'] = ads
-        return context
+        return start_time, end_time
 
 
-class TotalClicksAndViewsListView(ListView):
-    template_name = 'advertiser_management/reports.html'
-    model = Ad
+class ReportViewSet(ReadOnlyModelViewSet, GetTimeMixin):
+    queryset = Ad.objects.all()
+    serializer_class = AdSerializer
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        start_time = self.kwargs['start_time']
-        end_time = self.kwargs['end_time']
-        delta = self.kwargs['delta']
-        ads = get_ads_total_clicks_views(start_time, end_time, delta)
-        context['ads'] = ads
-        return context
+    @action(detail=False, description='shows ctr')
+    def get_ctr(self, _):
+        start_time, end_time = self.get_time()
+        queryset = Ad.get_total_ctr(start_time, end_time)
+        serializer = AdCTRSerializer(queryset, many=True)
+        return Response(
+            serializer.data
+        )
 
+    @action(detail=False, description='shows estimation')
+    def get_duration(self, _):
+        queryset = self.get_queryset()
+        serializer = AdEstimationSerializer(queryset, many=True)
+        return Response(
+            serializer.data
+        )
 
-def get_ads_total_csr(start_time, end_time):
-    return Ad.objects.annotate(
-        csr=Cast(Count(
-            F('clicks'),
-            distinct=True,
-            filter=Q(
-                clicks__time__range=(start_time, end_time)
-            )
-        ), FloatField()) / Cast(Count(
-            F('views'),
-            distinct=True,
-            filter=Q(
-                views__time__range=(start_time, end_time)
-            ),
-            output_field=FloatField()
-        ), FloatField())
-    ).order_by('-csr')
-
-
-def get_ads_total_clicks_views(start_time, end_time, delta):
-    ads = Ad.objects.all()
-    response = dict()
-    for ad in ads:
-        ad_response = list()
-        start = start_time
-        while start < end_time:
-            end = start + timezone.timedelta(hours=delta)
-            d = get_query(ad, start_time=start, end_time=end)
-            ad_response.append(d)
-
-            start = end
-
-        response.update({ad: ad_response})
-
-    return response
-
-
-def get_query(ad, start_time, end_time):
-    clicks_count = ad.clicks.filter(
-        time__range=(start_time, end_time)
-    ).count()
-
-    views_count = ad.views.filter(
-        time__range=(start_time, end_time)
-    ).count()
-
-    d = dict()
-    d.update({
-        'start_time': start_time,
-        'end_time': end_time,
-        'total_clicks': clicks_count,
-        'total_view': views_count,
-    })
-    return d
+    @action(detail=False, description='shows total clicks views')
+    def get_total_info(self, request):
+        start_time, end_time = self.get_time()
+        delta = int(request.query_params.get('delta'))
+        ads = Ad.get_total_clicks_views(start_time, end_time, delta)
+        return Response(
+            ads.values()
+        )
