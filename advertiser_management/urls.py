@@ -22,6 +22,7 @@ urlpatterns = [
          ShowAllAdsListView.as_view()),
     path('click/<int:ad_id>/',
          AdOnClickRedirectView.as_view()),
+    # old
     path('report/start=<date-time:start_time>&end=<date-time:end_time>&delta=<int:delta>/',
          TotalClicksAndViewsListView.as_view()),
     path('report-csr/start=<date-time:start_time>&end=<date-time:end_time>/',

@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.views.generic.base import RedirectView
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -34,6 +36,8 @@ def get_closest_view(ad, ip, time):
 class AdViewSet(ModelViewSet):
     serializer_class = AdSerializer
     queryset = Ad.objects.all()
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
         queryset = Advertiser.objects.all()
