@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.views.generic import ListView
 from django.views.generic.base import RedirectView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -33,15 +34,21 @@ class AdViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
-        queryset = Advertiser.objects.all()  # should changed based on which ads are viewed
-        update_ads_view(queryset, self.request.ip)
-        serializer = AdvertiserSerializer(queryset, many=True)
+        advertisers = Advertiser.objects.all()
+        View.update_advertisers_view(advertisers, self.request.ip)
+        serializer = AdvertiserSerializer(advertisers, many=True)
         return Response(
             serializer.data
         )
 
 
-def update_ads_view(advertisers, ip):
-    for advertiser in advertisers:
-        for ad in advertiser.ads.all():
-            View.objects.create(ad=ad, ip=ip)
+class ShowAllAdsListView(ListView):
+    template_name = 'advertiser_management/ads.html'
+    model = Advertiser
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        advertisers = Advertiser.objects.all()
+        View.update_advertisers_view(advertisers, self.request.ip)
+        context['advertisers'] = advertisers
+        return context
