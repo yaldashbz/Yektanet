@@ -33,19 +33,15 @@ class AdViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
-        queryset = Advertiser.objects.all()
-        update_advertisers_view(queryset, self.request.ip)
+        queryset = Advertiser.objects.all()  # should changed based on which ads are viewed
+        update_ads_view(queryset, self.request.ip)
         serializer = AdvertiserSerializer(queryset, many=True)
         return Response(
             serializer.data
         )
 
 
-def update_advertisers_view(advertisers, ip):
+def update_ads_view(advertisers, ip):
     for advertiser in advertisers:
-        update_ads(advertiser, ip)
-
-
-def update_ads(advertiser, ip):
-    for ad in advertiser.ads.all():
-        View.objects.create(ad=ad, ip=ip)
+        for ad in advertiser.ads.all():
+            View.objects.create(ad=ad, ip=ip)
