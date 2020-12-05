@@ -21,16 +21,9 @@ class AdOnClickRedirectView(RedirectView):
         ad = get_object_or_404(Ad, pk=kwargs['ad_id'])
         ip = self.request.ip
         now = timezone.now()
-        view = get_closest_view(ad, ip, now)
+        view = ad.get_closest_view(ip, now)
         Click.objects.create(ad=ad, ip=ip, duration=now - view.time)
         return ad.link
-
-
-def get_closest_view(ad, ip, time):
-    return ad.views.filter(
-        ip=ip,
-        time__lt=time
-    ).order_by('-time')[0]
 
 
 class AdViewSet(ModelViewSet):

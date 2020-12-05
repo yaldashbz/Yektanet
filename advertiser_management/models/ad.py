@@ -84,7 +84,7 @@ class Ad(Model):
             start = start_time
             while start < end_time:
                 end = start + timezone.timedelta(hours=delta)
-                d = Ad.get_query_in_time_range(ad, start_time=start, end_time=end)
+                d = ad.get_dict_in_time_range(start_time=start, end_time=end)
                 ad_response.append(d)
 
                 start = end
@@ -93,13 +93,12 @@ class Ad(Model):
 
         return response
 
-    @staticmethod
-    def get_query_in_time_range(ad, start_time, end_time):
-        clicks_count = ad.clicks.filter(
+    def get_dict_in_time_range(self, start_time, end_time):
+        clicks_count = self.clicks.filter(
             time__range=(start_time, end_time)
         ).count()
 
-        views_count = ad.views.filter(
+        views_count = self.views.filter(
             time__range=(start_time, end_time)
         ).count()
 
@@ -112,3 +111,8 @@ class Ad(Model):
         })
         return d
 
+    def get_closest_view(self, ip, time):
+        return self.views.filter(
+            ip=ip,
+            time__lt=time
+        ).order_by('-time')[0]
