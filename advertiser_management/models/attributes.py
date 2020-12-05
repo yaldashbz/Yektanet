@@ -37,9 +37,3 @@ class View(BaseAttribute):
 
     def __str__(self):
         return str(self.ad.id) + ' : ' + self.ip + ' - ' + str(self.time)
-
-    @staticmethod
-    def update_advertisers_view(advertisers, ip):
-        for advertiser in advertisers:
-            for ad in advertiser.ads.all():
-                View.objects.create(ad=ad, ip=ip)

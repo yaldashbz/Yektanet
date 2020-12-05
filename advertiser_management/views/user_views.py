@@ -35,7 +35,7 @@ class AdViewSet(ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         advertisers = Advertiser.objects.all()
-        View.update_advertisers_view(advertisers, self.request.ip)
+        update_advertisers_view(advertisers, self.request.ip)
         serializer = AdvertiserSerializer(advertisers, many=True)
         return Response(
             serializer.data
@@ -49,6 +49,12 @@ class ShowAllAdsListView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         advertisers = Advertiser.objects.all()
-        View.update_advertisers_view(advertisers, self.request.ip)
+        update_advertisers_view(advertisers, self.request.ip)
         context['advertisers'] = advertisers
         return context
+
+
+def update_advertisers_view(advertisers, ip):
+    for advertiser in advertisers:
+        for ad in advertiser.ads.all():
+            View.objects.create(ad=ad, ip=ip)
